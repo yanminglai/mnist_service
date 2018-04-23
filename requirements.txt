@@ -1,0 +1,5 @@
+tensorflow
+Flask
+cassandra-driver
+Redis
+Pillow
