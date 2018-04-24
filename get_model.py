@@ -27,5 +27,5 @@ with tf.Session() as sess:
         batch_xs, batch_ys = mnist.train.next_batch(100)
         sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 
-    save_path = saver.save(sess, "/mnist_project/models")
+    save_path = saver.save(sess, "model1")
 print ("Model saved in file: ", save_path)

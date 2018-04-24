@@ -22,7 +22,7 @@ init = tf.global_variables_initializer()
 saver = tf.train.Saver()
 sess = tf.Session()
 sess.run(init)
-saver.restore(sess, "mnist_project/models")
+saver.restore(sess, "models/model1")
 ##############
 
 ### Connect to the cassandra 
