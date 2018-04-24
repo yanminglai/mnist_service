@@ -25,28 +25,29 @@ sess.run(init)
 saver.restore(sess, "mnist_project/models")
 ##############
 
-### Connect to the cassandra database
+### Connect to the cassandra 
 cluster = Cluster(contact_points=["172.17.0.2"],port=9042)
 session = cluster.connect()
-### Create KEYSPACE and TABLE if not exist
+### Create KEYSPACE and TABLE
 session.execute("create KEYSPACE if not exists mnist_database WITH replication = {'class':'SimpleStrategy', 'replication_factor': 2};")
 session.execute("use mnist_database")
 session.execute("create table if not exists mnist(id uuid, digits int, image_name text, upload_time timestamp, primary key(id));")
 #############
 
+### Flask
 @app.route("/prediction", methods=['GET','POST'])
 def predictint():
-    imname = request.files["file"]   #Input
+    imname = request.files["file"]   
     file_name = request.files["file"].filename
     imvalu = prepareImage(imname)
     prediction = tf.argmax(y,1)
     pred = prediction.eval(feed_dict={x: [imvalu]}, session=sess)
-    #grab time
+    #get timestamp
     uploadtime=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
-    #insert data to cassandra
+    #store history
     session.execute("INSERT INTO mnist(id, digits, image_name, upload_time) values(uuid(), %s, %s, %s)",[int(str(pred[0])), file_name, uploadtime])
-    return "The number upload is: %s  (91%) " % str(pred[0])
-
+    return "The number upload is: [%s]" % str(pred[0])
+### pre process image
 def prepareImage(i):
     im = Image.open(i).convert('L')
     width = float(im.size[0])
