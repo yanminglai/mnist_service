@@ -7,7 +7,7 @@ from cassandra.cluster import Cluster
 import time
 import sys
 import tensorflow as tf
-
+# Cassandra part to be finished
 # Connect to Redis
 redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
 
